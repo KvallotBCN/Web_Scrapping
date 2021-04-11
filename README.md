@@ -38,6 +38,7 @@ if reponse.ok :
     soup = BeautifulSoup(reponse.text , "lxml")
 
 ##### Titre:
+
     title = soup.title.string
     print("Le titre est: " + title)
 
@@ -46,48 +47,56 @@ if reponse.ok :
 ##### Table:
     Table = soup.find(attrs={"class": "table table-striped"}) 
 
-######UPC:
+#####UPC:
+
     UPC = Table.contents[1]
     print("The UPC of the Book is : " + UPC.text)
     print()
 
-######Product_Type
+#####Product_Type:
+
     Line_with_Product_type_in_Website = UPC.find_next("tr")
     Ref_Product_type = Line_with_Product_type_in_Website.find("td")
     print("The type of the product is : " + Ref_Product_type.text)
     print()
 
-######Price without Tax
+#####Price without Tax:
+
     Line_with_Price_sin_tax_in_Website = Line_with_Product_type_in_Website.find_next("tr")
     Price_sin_tax = Line_with_Price_sin_tax_in_Website.find("td")
     print("The price of the Book without taxes is " + Price_sin_tax.text)
     print()
     
-######Price with Tax
+#####Price with Tax:
+
     Line_with_Price_with_tax_in_Website = Line_with_Price_sin_tax_in_Website.find_next("tr")
     Price_with_tax = Line_with_Price_with_tax_in_Website.find("td")
     print("The price of the Book with taxes is " + Price_with_tax.text)
     print()
 
-######Tax:
+#####Tax:
+
     Line_Tax_in_Website = Line_with_Price_with_tax_in_Website.find_next("tr")
     Tax = Line_Tax_in_Website.find("td")
     print("The tax applied on this book is  " + Tax.text)
     print()
 
-######Stock:
+#####Stock:
+
     Line_Stock_in_Website = Line_Tax_in_Website.find_next("tr")
     Stock = Line_Stock_in_Website.find("td")
     print("Availability of the book = " + Stock.text)
     print()
 
-######Number reviews:
+#####Number reviews:
+
     Line_Number_reviews_in_Website = Line_Stock_in_Website.find_next("tr")
     Number_reviews = Line_Number_reviews_in_Website.find("td")
     print("Number of reviews about this book are " + Number_reviews.text)
     print()
 
-######Description of the Book:
+#####Description of the Book:
+
     print("The Descrition of the Book : ")
     page = soup.find(attrs={"id": "product_description"})
     paragraph = page.find_next("p")
@@ -101,6 +110,7 @@ if reponse.ok :
  Si la longueur de p est de plus de quelques mots, imprimer p.
 
 ###### The Category of where is located the Book: 
+
     url_top_page = soup.findAll("ul" , attrs={"class": "breadcrumb"})
     for urls in url_top_page :
         category_url = urls.contents[5]
@@ -112,7 +122,8 @@ if reponse.ok :
 
 Chercher la premiere url de chaque page qui est l'image du livre. Les six autres url sont les urls des livres dans "Products you recently viewed".
 L'URL n'est pas entière, il faut donc utiliser "from urllib.parse import urljoin" qui permet de joindre la base de url avec le reste de l'url et donc de l'avoir entiere. 
-####### Image URL:
+###### Image URL:
+
     Image_url = soup.find("img").get("src")
     base_url = "http://books.toscrape.com/.html"
     href = Image_url
